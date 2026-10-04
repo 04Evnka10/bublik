@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kanban Task Board</title>
+  <!-- Tailwind CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex justify-center items-center h-screen">
+
+<div class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg">
+  <h1 class="text-2xl font-bold text-center mb-4">Kanban Task Board</h1>
+  
+  <!-- Input and Add Task Button -->
+  <div class="mb-4 flex justify-between items-center">
+    <input type="text" id="taskInput" placeholder="Add a task..." class="flex-1 p-2 rounded mr-2 focus:outline-none" />
+    <button onclick="addTask()" class="bg-blue-500 text-white px-3 py-2 rounded">Add Task</button>
+  </div>
+
+  <!-- Columns -->
+  <div class="grid grid-cols-2 gap-4">
+    <!-- To Do Column -->
+    <div id="todoColumn" class="border p-4 rounded shadow-md bg-gray-50">
+      <h2 class="text-xl font-bold mb-2">To Do</h2>
+      <!-- Task Cards will be added here dynamically -->
+       <div class="bg-white p-4 rounded shadow-md mb-2">
+        <p>לעשות שב באנגלית</p>
+      <button onclick="moveToCompleted(this)" class="bg-green-500 text-white px-3 py-1 rounded mr-1">Move to Completed</button>
+  <button onclick="deleteTask(this)" class="bg-red-500 text-white px-3 py-1 rounded">Delete</button>
+    ד</div>
+    </div>
+
+    <!-- Completed Column -->
+    <div id="completedColumn" class="border p-4 rounded shadow-md bg-gray-50">
+      <h2 class="text-xl font-bold mb-2">Completed</h2>
+      <!-- Task Cards will be moved here dynamically -->
+    
+    <div class="bg-white p-4 rounded shadow-md mb-2">
+        <p>להתקין code runner</p>
+        <button onclick="deleteTask(this)" class="bg-red-500 text-white px-3 py-1 rounded">Delete</button>
+     </div>
+    <div class="bg-white p-4 rounded shadow-md mb-2">
+        <p>לסיים שב במחשבים</p>
+  <button onclick="deleteTask(this)" class="bg-red-500 text-white px-3 py-1 rounded">Delete</button>
+</div>
+    
+</div>
+
+<script>
+  // Function to add a task
+  function addTask() {
+    const taskInput = document.getElementById('taskInput');
+    const taskText = taskInput.value.trim();
+    if (taskText === '') return;
+
+    const taskCard = createTaskCard(taskText);
+    document.getElementById('todoColumn').appendChild(taskCard);
+
+    // Clear the input field
+    taskInput.value = '';
+  }
+
+  // Function to create a new task card
+  function createTaskCard(text) {
+    const card = document.createElement('div');
+    card.className = 'bg-white p-4 rounded shadow-md mb-2';
+    
+    // Task text
+    card.innerHTML = `<p>${text}</p>`;
+    
+    // Move to Completed button
+    const moveButton = document.createElement('button');
+    moveButton.className = 'bg-green-500 text-white px-3 py-1 rounded mr-1';
+    moveButton.innerText = 'Move to Completed';
+    moveButton.onclick = () => {
+      card.parentElement.removeChild(card);
+      document.getElementById('completedColumn').appendChild(card);
+    };
+    
+    // Delete button
+    const deleteButton = document.createElement('button');
+    deleteButton.className = 'bg-red-500 text-white px-3 py-1 rounded';
+    deleteButton.innerText = 'Delete';
+    deleteButton.onclick = () => card.parentElement.removeChild(card);
+
+    // Append buttons to the card
+    card.appendChild(moveButton);
+    card.appendChild(deleteButton);
+
+    return card;
+  }
+  function moveToCompleted(button) {
+    const card = button.parentElement;
+    document.getElementById('completedColumn').appendChild(card);
+  }
+
+  function deleteTask(button) {
+    const card = button.parentElement;
+    card.remove();
+  }
+</script>
+
+</body>
+</html>
